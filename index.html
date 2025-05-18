@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mi Negocio En Web</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <nav class="menu">
+        <ul>
+            <li><a href="#bovinos">Bovinos</a></li>
+            <li><a href="#ovinos">Ovinos</a></li>
+            <li><a href="#caprino">Caprino</a></li>
+            <li><a href="#porcino">Porcino</a></li>
+        </ul>
+    </nav>
+
+    <h1 class="titulo">UNA NUEVA VISIÓN</h1>
+    <h2 class="subtitulo">
+        Una página web diseñada y enfocada 100% en el progreso del campo.<br />
+        Tus anotaciones simples y fáciles.<br />
+        No pierdas el tiempo.
+    </h2>
+
+    <div class="animales">
+        <div class="cuadro-animal" id="bovinos">
+            <h2>Bovinos</h2>
+        </div>
+        <h3 class="texto-animal">Notas Y calendario </h3>
+        <p class="texto-animal">Solamente apreta en la fecha donde quieras poner alguna nota y se guarda automaticamente</p>
+        <div class="calendario">
+            <div class="encabezado">
+              <button id="prev">❮</button>
+              <h2 id="mes-anio">Mayo 2025</h2>
+              <button id="next">❯</button>
+            </div>
+            <div class="semana">
+              <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span>
+            </div>
+            <div class="dias" id="dias"></div>
+        </div>
+        <div id="modalNota" class="modal">
+            <div class="modal-contenido">
+              <span id="cerrarModal" class="cerrar">&times;</span>
+              <h3 id="tituloFecha"></h3>
+              <textarea id="notaTexto" placeholder="Escribe tu nota..."></textarea>
+              <button id="guardarNota">Guardar Nota</button>
+            </div>
+        </div>
+
+        <div class="cuadro-animal" id="ovinos">
+            <h2>Ovinos</h2>
+        </div>
+        
+        <h3 class="texto-animal">Información y anotaciones sobre ovinos.</h3>
+
+        <div class="cuadro-animal" id="caprino">
+            <h2>Caprino</h2>
+        </div>
+        <h3 class="texto-animal">Datos relacionados con caprinos.</h3>
+
+        <div class="cuadro-animal" id="porcino">
+            <h2>Porcino</h2>
+        </div>
+        <h3 class="texto-animal">Detalles y notas sobre porcinos.</h3>
+
+    </div>
+
+    <p class="patrocinio">
+        Síguenos en Instagram:
+        <a href="https://www.instagram.com/tallerescbaoficial/?hl=es" target="_blank" class="link-sin-estilo">
+            @mi.negocio_web
+        </a>
+    </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const diasEl = document.getElementById("dias");
+        const mesAnioEl = document.getElementById("mes-anio");
+        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+        let fecha = new Date();
+
+        function renderizarCalendario(fechaActual) {
+          const año = fechaActual.getFullYear();
+          const mes = fechaActual.getMonth();
+
+          mesAnioEl.textContent = `${meses[mes]} ${año}`;
+          diasEl.innerHTML = "";
+
+          const primerDia = new Date(año, mes, 1).getDay();
+          const ajuste = (primerDia + 6) % 7;
+          const totalDias = new Date(año, mes + 1, 0).getDate();
+
+          for (let i = 0; i < ajuste; i++) {
+            diasEl.innerHTML += `<div></div>`;
+          }
+
+          const hoy = new Date();
+          const esEsteMes = hoy.getFullYear() === año && hoy.getMonth() === mes;
+
+          for (let d = 1; d <= totalDias; d++) {
+            const clase = (esEsteMes && d === hoy.getDate()) ? "hoy" : "";
+            const fechaStr = `${año}-${mes + 1}-${d}`;
+            const tieneNota = localStorage.getItem(fechaStr);
+
+            diasEl.innerHTML += `
+              <div class="${clase}" data-fecha="${fechaStr}" style="${tieneNota ? 'background:#fffa90;' : ''}">
+                ${d}
+              </div>`;
+          }
+        }
+
+        document.getElementById("prev").onclick = () => {
+          fecha.setMonth(fecha.getMonth() - 1);
+          renderizarCalendario(fecha);
+        };
+
+        document.getElementById("next").onclick = () => {
+          fecha.setMonth(fecha.getMonth() + 1);
+          renderizarCalendario(fecha);
+        };
+
+        renderizarCalendario(fecha);
+
+        const modal = document.getElementById("modalNota");
+        const cerrarModal = document.getElementById("cerrarModal");
+        const notaTexto = document.getElementById("notaTexto");
+        const guardarNota = document.getElementById("guardarNota");
+        const tituloFecha = document.getElementById("tituloFecha");
+        let fechaSeleccionada = "";
+
+        cerrarModal.onclick = () => modal.style.display = "none";
+        window.onclick = e => { if (e.target == modal) modal.style.display = "none"; }
+
+        guardarNota.onclick = () => {
+          const texto = notaTexto.value;
+          localStorage.setItem(fechaSeleccionada, texto);
+          modal.style.display = "none";
+          renderizarCalendario(fecha);
+        };
+
+        diasEl.onclick = e => {
+          if (e.target.dataset.fecha) {
+            fechaSeleccionada = e.target.dataset.fecha;
+            tituloFecha.textContent = `Nota para el ${fechaSeleccionada}`;
+            notaTexto.value = localStorage.getItem(fechaSeleccionada) || "";
+            modal.style.display = "block";
+          }
+        };
+      });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
