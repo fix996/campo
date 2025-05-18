@@ -113,6 +113,7 @@ body {
   padding: 30px;
   width: 340px;
   text-align: center;
+margin-left: -15px;
 }
 
 .encabezado {
@@ -206,9 +207,19 @@ textarea {
   height: 100px;
   margin: 10px 0;
 }
-.calendario {
-  margin: 40px auto;
-  max-width: 100%;
+.calendario button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: black; /* Esto hace que el > y ❮ sean negros */
+
+}
+
+
+.encabezado{
+color: #000000;
+
 }
 
 @media (min-width: 768px) {
@@ -216,4 +227,28 @@ textarea {
     margin-top: 0;
     margin-bottom: 60px;
   }
+   }
+
+label,  button {
+  display: block;
+  margin: 10px 0;
+  color: white;
+  text-align: center;
+}
+
+.resultado {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+select, input{
+display: block;
+  margin: 10px 0;
+  color: rgb(0, 0, 0);
+  text-align: center;
+
+}
+.resultado{
+color: white;
+
 }
